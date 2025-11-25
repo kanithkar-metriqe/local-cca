@@ -137,7 +137,7 @@ agent = Agent(
         - to_mail (array of strings)
         - cc_mail (array of strings)
         - db_save_master (true/false)
-        - db_save_thread (true/false)
+        - db_save_thread (true)
         - direction (string: "inbound" or "outbound")  ← REQUIRED for thread
         - attachments (array of strings, optional)
 
@@ -150,6 +150,7 @@ agent = Agent(
           Greeting → Issue → Required Actions → Regards block
         - Do NOT add extra greetings or repeated text.
         - Call `send_ai_mail(sender, receiver, subject, content)` with the same subject and body.
+        - Missing Bank Entry Notification - CCA-362-0001 in subject first issue will come CCA id must be came after text
 
         ## TEAMS RULES
         - Generate a short alert for Teams.
