@@ -2,4 +2,5 @@ openai
 openai-agents
 python-dotenv
 psycopg2
+pika
 psycopg2-binary

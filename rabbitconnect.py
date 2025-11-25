@@ -7,7 +7,7 @@ def handling_callback():
     try:
         SAMPLE_DATA = { 
                 "property_id": 362,
-                "event_type": "teams_notification",
+                "event_type": "Missing Bank Entry",
                 "message": (
                     "GL entry posted last week does not have a corresponding bank entry. "
                     "Please review and take necessary action."
