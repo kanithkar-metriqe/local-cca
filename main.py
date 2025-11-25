@@ -1,8 +1,6 @@
 import os
 import json
 import asyncio
-import threading
-import time
 from dotenv import load_dotenv
 
 from config.rabitmqconfig import rabbitmq_connection
@@ -11,11 +9,6 @@ from mail_agent import agent
 from rabbitconnect import handling_callback
 from openai import OpenAI
 from agents import Runner
-
-# ==========================================
-# CONFIG
-# ==========================================
-QUEUE_IDLE_TIMEOUT = 15  # Auto-shutdown if idle for 15 seconds
 
 # Load environment variables
 load_dotenv()
@@ -74,23 +67,18 @@ async def process_message(body):
 # ==========================================
 # RabbitMQ callback
 # ==========================================
-def on_rabbitmq_message(ch, method, properties, body, loop):
+def on_rabbitmq_message(ch, method, properties, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
     print("\n Message received from HITL queue")
-
-    loop.call_soon_threadsafe(asyncio.create_task, process_message(body))
+    
+    # Run async function in the event loop
+    asyncio.run(process_message(body))
 
 
 # ==========================================
-# RABBITMQ CONSUMER + AUTO SHUTDOWN
+# RABBITMQ CONSUMER
 # ==========================================
 def start_consumer():
-    # Create event loop for this thread
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-    print("\n Event loop started in RabbitMQ consumer thread")
-
     channel = rabbitmq_connection()
     if not channel or not channel.is_open:
         print("RabbitMQ connection failed")
@@ -99,50 +87,20 @@ def start_consumer():
     channel.queue_declare(queue=HITLcompletedqueue, durable=False)
     channel.basic_qos(prefetch_count=1)
 
-    last_message_time = time.time()
-
-    def on_msg(ch, method, props, body):
-        nonlocal last_message_time
-        last_message_time = time.time()
-        on_rabbitmq_message(ch, method, props, body, loop)
-
     channel.basic_consume(
         queue=HITLcompletedqueue,
-        on_message_callback=on_msg
+        on_message_callback=on_rabbitmq_message
     )
 
     print("\n Waiting for HITL queue messages...\n")
-
-    # Blocking consumer executed inside another thread
-    def consume():
-        try:
-            channel.start_consuming()
-        except Exception as e:
-            print("Consuming stopped:", e)
-
-    consume_thread = threading.Thread(target=consume, daemon=True)
-    consume_thread.start()
-
-    # Monitor idle queue to auto-shutdown
-    async def monitor_idle_timeout():
-        while True:
-            await asyncio.sleep(2)
-            idle_for = time.time() - last_message_time
-
-            if idle_for >= QUEUE_IDLE_TIMEOUT:
-                print(f"\n No messages for {QUEUE_IDLE_TIMEOUT}s → Auto-Shutdown")
-                try:
-                    channel.stop_consuming()
-                except:
-                    pass
-                loop.stop()
-                break
-
-    loop.create_task(monitor_idle_timeout())
-
-    loop.run_forever()
-
-    print("\n Event loop ended — consumer thread shutting down")
+    
+    try:
+        channel.start_consuming()
+    except KeyboardInterrupt:
+        print("\n Stopping consumer...")
+        channel.stop_consuming()
+    except Exception as e:
+        print(f"Consuming error: {e}")
 
 
 # ==========================================
@@ -150,12 +108,7 @@ def start_consumer():
 # ==========================================
 if __name__ == "__main__":
     handling_callback()
-
-    consumer_thread = threading.Thread(target=start_consumer)
-    consumer_thread.start()
-
+    
     print("\n CCA Agent Listener Started Successfully")
-
-    # Clean shutdown
-    consumer_thread.join()
+    start_consumer()
     print("\n Python shutdown complete")
