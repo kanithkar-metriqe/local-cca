@@ -26,35 +26,16 @@ def send_teams_message(agent_text: str) -> str:
                     "body": [
                         {
                             "type": "TextBlock",
-                            "text": "Metriqe",
+                            "text": "Metriqe AI",
                             "size": "Large",
                             "weight": "Bolder",
                             "color": "Accent"
                         },
-                         {
-                            "type": "TextBlock",
-                            "text": "CCA Notification Bot",
-                            "size": "small",
-                            "weight": "Bolder",
-                            "color": "Accent"
-                        },
                         {
                             "type": "TextBlock",
-                            "text": agent_text,      # 👈 AGENT TEXT IS INSERTED HERE
+                            "text": agent_text,
                             "wrap": True,
                             "spacing": "Medium"
-                        }
-                    ],
-                    "actions": [
-                        {
-                            "type": "Action.OpenUrl",
-                            "title": "Approved",
-                            "url": "https://example.com"
-                        },
-                        {
-                            "type": "Action.OpenUrl",
-                            "title": "Resubmit",
-                            "url": "https://example.com"
                         }
                     ]
                 }
@@ -68,4 +49,4 @@ def send_teams_message(agent_text: str) -> str:
     if response.status_code == 200:
         return "Adaptive Card sent successfully ✔️"
     else:
-        return f"❌ Failed: {response.status_code} - {response.text}"
+        return f"Failed: {response.status_code} - {response.text}"

@@ -1,0 +1,102 @@
+{
+    "trackingId": "",
+    "propertyCode": "362",
+    "propertyId": "",
+    "dashboard_info": [
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "HITL Agent process initiated and waiting for human intervention."
+        },
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "Starting HITL Agent for property code "
+        },
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "HITL Agent completed for property code "
+        },
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "Preparing adaptive card message for human review."
+        },
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "Error in HITL Agent: 'NoneType' object has no attribute 'get'"
+        }
+    ],
+    "response": {
+        "summary": "The bank statement amount matches the merchant settlement amount, but there is a variance in the associated GL amount.",
+        "classification": "Unmatched - High GL Amount Variance",
+        "merchant_amount": "800.00",
+        "bank_amount": "800.00",
+        "merchant_settlement_date": "2025-08-11",
+        "bank_statement_date": "2025-08-11",
+        "reason": "The bank statement amount of 800.00 matches the merchant settlement amount of 800.00 on the settlement date of 2025-08-11. However, the GL amount of 1000.00 shows a high variance of 200.00 from the expected amount.",
+        "analysis_steps": "1. Verified the bank statement amount (800.00) against the merchant amount (800.00) - they match. 2. Checked for merchant fees or charges; identified fees totaling 20.00. 3. Analyzed GL amount of 1000.00, which shows a significant variance from the bank statement. 4. Since the GL variance is significant, classified as unmatched.",
+        "recommended_action": "Send to HITL queue for investigation.",
+        "is_hitl_required": true
+    },
+    "databaseCreds": {
+        "host": "metriqe-db-new.cf8ac60ou0zv.ap-south-1.rds.amazonaws.com",
+        "username": "postgres",
+        "password": "Metriqe123#",
+        "database": "met_ai_agents_dev",
+        "port": "5432"
+    },
+    "agent": "cra",
+    "module": "HITL Agent",
+    "trackingId": "",
+    "error": "Unknown error",
+    "dashboard_info": [
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "HITL Agent process initiated and waiting for human intervention."
+        },
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "Starting HITL Agent for property code "
+        },
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "HITL Agent completed for property code "
+        },
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "Preparing adaptive card message for human review."
+        },
+        {
+            "trackingId": "",
+            "agent": "HITL Agent",
+            "agentProcessId": null,
+            "source": "HITL Agent",
+            "status": "Error in HITL Agent: 'NoneType' object has no attribute 'get'"
+        }
+    ]
+}

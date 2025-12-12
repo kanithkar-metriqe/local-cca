@@ -4,7 +4,7 @@ import asyncio
 from dotenv import load_dotenv
 
 from config.rabitmqconfig import rabbitmq_connection
-from config.configuration import HITLcompletedqueue, CCAcompletedqueue
+from config.configuration import CCAincomingqueue, CCAcompletedqueue
 from mail_agent import agent
 from rabbitconnect import handling_callback
 from openai import OpenAI
@@ -14,10 +14,6 @@ from agents import Runner
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-
-# ==========================================
-# ASYNC PROCESS HANDLER
-# ==========================================
 async def process_message(body):
     print("\n process_message TRIGGERED")
 
@@ -63,10 +59,6 @@ async def process_message(body):
 
     print("Result pushed to CCA queue")
 
-
-# ==========================================
-# RabbitMQ callback
-# ==========================================
 def on_rabbitmq_message(ch, method, properties, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
     print("\n Message received from HITL queue")
@@ -75,20 +67,17 @@ def on_rabbitmq_message(ch, method, properties, body):
     asyncio.run(process_message(body))
 
 
-# ==========================================
-# RABBITMQ CONSUMER
-# ==========================================
 def start_consumer():
     channel = rabbitmq_connection()
     if not channel or not channel.is_open:
         print("RabbitMQ connection failed")
         return
 
-    channel.queue_declare(queue=HITLcompletedqueue, durable=False)
+    channel.queue_declare(queue=CCAincomingqueue, durable=False)
     channel.basic_qos(prefetch_count=1)
 
     channel.basic_consume(
-        queue=HITLcompletedqueue,
+        queue=CCAincomingqueue,
         on_message_callback=on_rabbitmq_message
     )
 
@@ -102,13 +91,9 @@ def start_consumer():
     except Exception as e:
         print(f"Consuming error: {e}")
 
-
-# ==========================================
-# MAIN ENTRY POINT
-# ==========================================
 if __name__ == "__main__":
     handling_callback()
     
     print("\n CCA Agent Listener Started Successfully")
-    start_consumer()
+    # start_consumer()
     print("\n Python shutdown complete")

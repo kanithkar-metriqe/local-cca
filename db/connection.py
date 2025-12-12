@@ -17,5 +17,5 @@ def get_conn():
         print("✅ PostgreSQL connection established")
         return conn
     except Exception as e:
-        print("❌ PostgreSQL connection failed:", e)
+        print("PostgreSQL connection failed:", e)
         raise

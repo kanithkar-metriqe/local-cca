@@ -3,7 +3,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CCAincomingqueue = "met-cca-agent-incoming-queue"
+# CCAincomingqueue = "met-queue-cca-agent"
+CCAincomingqueue = "met-queue-cca-agent"
 HITLcompletedqueue = "met-hitl-agent-completed-queue"
 CCAcompletedqueue = "met-cca-agent-completed-queue"
 CCAexceptionqueue = "met-cca-agent-exception-queue"

@@ -1,7 +1,6 @@
 from db.connection import get_conn
 
 def add_thread(record):
-    print("----------------------", record)
     try:
         conn = get_conn()
         cur = conn.cursor()

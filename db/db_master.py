@@ -15,6 +15,10 @@ def add_master(record):
             RETURNING id;
         """
 
+        if not record:
+            print("record not found")
+            return False
+
         cur.execute(query, (
             record.get("cca_id"),
             record.get("property_id"),
@@ -48,7 +52,7 @@ def get_last_cca_id(property_id: int):
 
     cur.execute("""
         SELECT cca_id 
-        FROM cca_master 
+        FROM cca_master_test 
         WHERE property_id = %s 
         ORDER BY id DESC 
         LIMIT 1
