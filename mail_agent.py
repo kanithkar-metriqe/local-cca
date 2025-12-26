@@ -105,7 +105,7 @@ except FileNotFoundError as error:
 
 agent = Agent(
     name="CCA Mail Agent",
-    model="gpt-4o-mini",
+    model="gpt-5.2",
     instructions=CCA_INSTRUCTIONS,
     tools=[send_ai_mail, send_teams_message, save_master, save_thread, generate_cca_id],
 )
